@@ -4,6 +4,8 @@
 
 Built on [Midnight](https://midnight.network) for the Midnight Buildathon (Wave 3). Deployed on Midnight **Preview** testnet.
 
+**Live app:** https://kanta-site-seven.vercel.app (rider check and public record) · **Demo video:** _link added on release_
+
 *Kanta* (काँटा) is the needle of a weighing scale. A *dharam kanta* is the public weighbridge that a buyer and a seller both trust. Kanta does the same for a rider and a platform.
 
 ---
@@ -12,7 +14,7 @@ Built on [Midnight](https://midnight.network) for the Midnight Buildathon (Wave 
 
 | Path | Time | What you do | What you see |
 |---|---|---|---|
-| **A. Rider check, no setup** | 1 min | Open the hosted app → *Check my pay* → paste a receipt from [Live evidence](#live-evidence) | Green: "Paid by the published rule". Then click *Try a receipt edited by ₹10*: red, not on the ledger |
+| **A. Rider check, no setup** | 1 min | Open [Salma's receipt in the hosted rider check](https://kanta-site-seven.vercel.app/#/rider?r=eyJjb250cmFjdEFkZHJlc3MiOiI4ZjgxYjRhOTc3OTBlODNlZGMzMDRmOTNlZjRlOTk3ZTE1ZDE0NThmMGMwZGNiZWIxYjgyZWZiYzIzMmU5ZDZhIiwibmV0d29yayI6InByZXZpZXciLCJydWxlVmVyc2lvbiI6IjEiLCJzYWx0IjoiODU1YzM3NWJhYzI1ZWQwOGExYjhhYWI4M2IxNjI3YzlmNDIyYmM5Yjc0N2M5NjViY2VmYTdhMjZjMDE3MzJiYyIsInRyaXAiOnsicmlkZXJLZXkiOiI1NzE0MmY5ODU3MzViZWQ2NjdkYmMxZjk3YjQ2Nzc5OTAzMjY4MTAwOWZlNTlmMTNlYTJjZmM5MzM2YzVlZTIyIiwidHJpcElkIjoiZDEwOTA2YWY2YTgyM2UxM2JjMzU1OWFlMGQ1YTBkOTEzYTZlZmVkYWUxNzJjNWEyNDQ0M2Y0YTU2YTYwYjhlYSIsInpvbmUiOiIxIiwic2xvdFN0YXJ0IjoiMTc5NTUzNjAwMCIsImRpc3RhbmNlTWV0cmVzIjoiMzIwMCIsIm1pbnV0ZXMiOiIyMiIsInBheW91dCI6Ijc5NDQifX0) (or open https://kanta-site-seven.vercel.app → *Check my pay* → paste any receipt from [Live evidence](#live-evidence)) | Green: "Paid by the published rule". Then click *Try a receipt edited by ₹10*: red, not on the ledger |
 | **B. Public record** | 1 min | Open *Public record* | The rule history (commitments + start times), the surge table, payout count, and what's public vs private, all read live from the Preview indexer |
 | **C. Full platform run** | 15 min | [Run it locally](#run-it-locally) → *Platform console* → record a payout, then tick **Pay this rider 10% less** | The honest payout lands on Preview with a receipt; the underpayment is refused by the contract before any transaction exists |
 | **D. Contract tests** | 2 min | `npm install && npm run compact && npm test` | 19 simulator tests drive the compiled contract through every rule |
