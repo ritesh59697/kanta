@@ -1,0 +1,12 @@
+{
+  "$comment": "Demo data for the platform console: zones, demo riders and the first pay rule (paise).",
+  "zones": [
+    { "id": 1, "name": "Koramangala" },
+    { "id": 2, "name": "Indiranagar" },
+    { "id": 3, "name": "HSR Layout" }
+  ],
+  "riders": ["Ravi", "Salma", "Joseph", "Meena"],
+  "firstRule": { "baseFare": 2500, "perKm": 600, "perMinute": 100, "minPayout": 3000 },
+  "surgePlan": { "1": 120, "2": 100, "3": 110 },
+  "surgeSlotsAhead": 6
+}

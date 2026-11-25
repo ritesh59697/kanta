@@ -1,0 +1,199 @@
+// Kanta: every delivery payout is proven to follow the one pay rule in force
+// and the zone's pre-announced surge, with no per-rider factor.
+// Riders' trips and earnings stay off the public ledger.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+pragma language_version >= 0.20;
+
+import CompactStandardLibrary;
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+// The platform's pay rule. Amounts are in paise. Kept private by the platform;
+// only a commitment to it goes on the ledger.
+export struct PayRule {
+  baseFare: Uint<32>;     // paise per order
+  perKm: Uint<32>;        // paise per km (applied per metre: perKm * metres / 1000)
+  perMinute: Uint<32>;    // paise per minute
+  minPayout: Uint<32>;    // floor per order, in paise
+}
+
+// A published rule version: commitment to the rule and when it comes into force.
+export struct RuleVersion {
+  commitment: Bytes<32>;
+  activeFrom: Uint<64>;   // unix seconds
+}
+
+// One delivery and what the rider was paid. Private input to recordPayout.
+export struct Trip {
+  riderKey: Bytes<32>;    // rider's pseudonymous key (hash of something only the rider holds)
+  tripId: Bytes<32>;
+  zone: Uint<16>;
+  slotStart: Uint<64>;    // unix seconds, start of the surge slot the trip belongs to
+  distanceMetres: Uint<32>;
+  minutes: Uint<16>;
+  payout: Uint<32>;       // paise actually paid
+}
+
+// What the rider's receipt commits to.
+export struct Receipt {
+  trip: Trip;
+  ruleVersion: Uint<32>;
+}
+
+export struct SlotKey {
+  zone: Uint<16>;
+  slotStart: Uint<64>;
+}
+
+// ---------------------------------------------------------------------------
+// Public ledger
+// ---------------------------------------------------------------------------
+
+export sealed ledger operator: Bytes<32>;          // platform's public key (hash of its secret)
+export sealed ledger noticeSeconds: Uint<64>;      // minimum notice before a rule comes into force
+export sealed ledger slotSeconds: Uint<64>;        // length of a surge slot
+export sealed ledger settleSeconds: Uint<64>;      // how long after its slot ends a trip can still be paid
+
+export ledger ruleCount: Counter;                  // rule versions are 1..ruleCount
+export ledger rules: Map<Uint<32>, RuleVersion>;
+export ledger surge: Map<Bytes<32>, Uint<16>>;     // slotKey -> surge x100 (120 = 1.2x)
+export ledger payouts: Set<Bytes<32>>;             // receipt commitments
+export ledger payoutCount: Counter;
+
+// ---------------------------------------------------------------------------
+// Witnesses (implemented in witnesses.ts, run only on the platform's machine)
+// ---------------------------------------------------------------------------
+
+witness operatorSecret(): Bytes<32>;
+witness ruleParams(version: Uint<32>): PayRule;     // the platform's private copy of rule `version`
+witness ruleSalt(version: Uint<32>): Bytes<32>;     // randomness for that rule's commitment
+witness newRule(): PayRule;                         // rule being published
+witness newRuleSalt(): Bytes<32>;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+circuit publicKey(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "kanta:operator:pk"), sk]);
+}
+
+circuit requireOperator(): [] {
+  assert(disclose(publicKey(operatorSecret()) == operator), "Only the platform operator can do this");
+}
+
+export pure circuit ruleCommitment(rule: PayRule, salt: Bytes<32>): Bytes<32> {
+  return persistentCommit<PayRule>(rule, salt);
+}
+
+export pure circuit slotKey(zone: Uint<16>, slotStart: Uint<64>): Bytes<32> {
+  return persistentHash<SlotKey>(SlotKey { zone: zone, slotStart: slotStart });
+}
+
+// The rider recomputes this from their receipt to find their payout on the ledger.
+export pure circuit payoutCommitment(receipt: Receipt, salt: Bytes<32>): Bytes<32> {
+  return persistentCommit<Receipt>(receipt, salt);
+}
+
+// Gross pay before the floor, scaled by 1000 (metres) * 100 (surge x100) = 100000.
+// Same formula for every rider: nothing in it depends on who the rider is.
+export pure circuit grossScaled(rule: PayRule, trip: Trip, surgeX100: Uint<16>): Uint<128> {
+  const perOrderMilli = (rule.baseFare * 1000 + rule.perMinute * trip.minutes * 1000) as Uint<96>;
+  const distanceMilli = (rule.perKm * trip.distanceMetres) as Uint<96>;
+  return ((perOrderMilli + distanceMilli) * surgeX100) as Uint<128>;
+}
+
+// payout must equal max(floor(gross / 100000), minPayout).
+export pure circuit payoutFollowsRule(rule: PayRule, trip: Trip, surgeX100: Uint<16>): Boolean {
+  const gross = grossScaled(rule, trip, surgeX100);
+  const p = trip.payout;
+  const pScaled = (p * 100000) as Uint<128>;
+  const nextScaled = ((p + 1) * 100000) as Uint<128>;
+  const minScaled = (rule.minPayout * 100000) as Uint<128>;
+  const isFloor = p == rule.minPayout && gross < minScaled;
+  const isFormula = p >= rule.minPayout && pScaled <= gross && gross < nextScaled;
+  return isFloor || isFormula;
+}
+
+// ---------------------------------------------------------------------------
+// Constructor and circuits
+// ---------------------------------------------------------------------------
+
+constructor(notice: Uint<64>, slot: Uint<64>, settle: Uint<64>) {
+  operator = disclose(publicKey(operatorSecret()));
+  noticeSeconds = disclose(notice);
+  slotSeconds = disclose(slot);
+  settleSeconds = disclose(settle);
+}
+
+// Publish a new rule version. Only its commitment and start time become public.
+// It cannot start before `noticeSeconds` from now, nor before the previous version.
+export circuit publishRule(activeFrom: Uint<64>): [] {
+  requireOperator();
+  const startAt = disclose(activeFrom);
+  assert(startAt >= noticeSeconds, "activeFrom is too early");
+  assert(blockTimeLte((startAt - noticeSeconds) as Uint<64>), "Rule must be announced at least noticeSeconds before it starts");
+
+  const current = ruleCount.read() as Uint<32>;
+  if (current > 0) {
+    assert(startAt > rules.lookup(current).activeFrom, "A new rule must start after the current one");
+  }
+
+  const version = (current + 1) as Uint<32>;
+  rules.insert(version, RuleVersion {
+    commitment: disclose(ruleCommitment(newRule(), newRuleSalt())),
+    activeFrom: startAt
+  });
+  ruleCount.increment(1);
+}
+
+// Publish the surge multiplier for one zone and slot. It must be published before
+// the slot starts and can never be changed afterwards.
+export circuit publishSurge(zone: Uint<16>, slotStart: Uint<64>, surgeX100: Uint<16>): [] {
+  requireOperator();
+  const start = disclose(slotStart);
+  const key = slotKey(disclose(zone), start);
+  assert(!surge.member(key), "Surge for this zone and slot is already published");
+  assert(blockTimeLt(start), "Surge must be published before the slot starts");
+  surge.insert(key, disclose(surgeX100));
+}
+
+// Record one payout. The proof shows the payout follows rule `version`, that this
+// version is the one in force right now, and that the surge was pre-announced.
+// Public: rule version used, the slot start, which zone/slot key was looked up, the receipt commitment.
+// Private: rider, trip, distance, time, amount, and the rule's parameters.
+export circuit recordPayout(trip: Trip, version: Uint<32>, receiptSalt: Bytes<32>): [] {
+  requireOperator();
+
+  const v = disclose(version);
+  assert(rules.member(v), "Unknown rule version");
+  const published = rules.lookup(v);
+  assert(blockTimeGte(published.activeFrom), "This rule version is not in force yet");
+  const next = (v + 1) as Uint<32>;
+  if (rules.member(next)) {
+    assert(blockTimeLt(rules.lookup(next).activeFrom), "This rule version has been replaced");
+  }
+
+  const rule = ruleParams(v);
+  assert(disclose(ruleCommitment(rule, ruleSalt(v)) == published.commitment), "Rule parameters do not match the published rule");
+
+  // The trip's slot must have started, and be recent enough to still be paid now.
+  const slotStart = disclose(trip.slotStart);
+  assert(blockTimeGte(slotStart), "This trip's slot has not started yet");
+  assert(blockTimeLt((slotStart + slotSeconds + settleSeconds) as Uint<64>), "This trip's slot is too old to be paid now");
+
+  const key = disclose(slotKey(trip.zone, trip.slotStart));
+  assert(surge.member(key), "No surge was announced for this zone and slot");
+  const surgeX100 = surge.lookup(key);
+
+  assert(disclose(payoutFollowsRule(rule, trip, surgeX100)), "Payout does not follow the rule in force");
+
+  const receipt = payoutCommitment(Receipt { trip: trip, ruleVersion: v }, receiptSalt);
+  assert(!payouts.member(receipt), "This receipt is already recorded");
+  payouts.insert(receipt);
+  payoutCount.increment(1);
+}

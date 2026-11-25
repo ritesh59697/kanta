@@ -1,0 +1,99 @@
+{
+  "manifest-version": "1",
+  "compiler-version": "0.36.1",
+  "compiler-commit": "7fa3a117c5e7efe9d2c51da04263e5f0b3509144",
+  "language-version": "0.28.0",
+  "runtime-version": "0.21.0",
+  "compiler": {
+    "type": "directory",
+    "contract-info.json": {
+      "type": "file",
+      "size": 17713,
+      "hash": "1685234f9208cdfc23d63d2edcba88e575a7b1bdb675b8c3343640d8c89d42f8"
+    }
+  },
+  "contract": {
+    "type": "directory",
+    "index.d.ts": {
+      "type": "file",
+      "size": 6060,
+      "hash": "574e64bce71e284af386bd895097c3301a7c21c7eed0d5eb59a7a124f89bc173"
+    },
+    "index.js": {
+      "type": "file",
+      "size": 136076,
+      "hash": "d462fa56cb7884ef084c244a227658fe9a5b6cede70e85b14a645867a4156ec0"
+    },
+    "index.js.map": {
+      "type": "file",
+      "size": 5407,
+      "hash": "40de39fe335c2e8fa22aba85a741178985961b5d4ad74df4dea65a56987de9af"
+    }
+  },
+  "zkir": {
+    "type": "directory",
+    "publishRule.bzkir": {
+      "type": "file",
+      "size": 1875,
+      "hash": "dafb83b32ce51daf202fd3938ab16060df7df43ebf8d54badac6844b2f25677d"
+    },
+    "publishRule.zkir": {
+      "type": "file",
+      "size": 7338,
+      "hash": "41f4acb39a61afee55e6e58376407da5c338f6f1cf450a493543b727e00ad978"
+    },
+    "publishSurge.bzkir": {
+      "type": "file",
+      "size": 988,
+      "hash": "586ad1b0da30ba245209a474939b774e10f9ce81a313fa0186b485a0e6084825"
+    },
+    "publishSurge.zkir": {
+      "type": "file",
+      "size": 3773,
+      "hash": "5a6b756e0864a736357eef2eb36173a03bdeb34019c3d8db41975770b6928996"
+    },
+    "recordPayout.bzkir": {
+      "type": "file",
+      "size": 4308,
+      "hash": "fe9d1b0a17192d38a5ecef9a265c2440c4e68a5f095bc06c4a4e879ab6318d48"
+    },
+    "recordPayout.zkir": {
+      "type": "file",
+      "size": 15848,
+      "hash": "bde74f001ab8e90893090ea66cd3c63e1480190c7af123a9ef3a04ea3c8900e1"
+    }
+  },
+  "keys": {
+    "type": "directory",
+    "publishRule.prover": {
+      "type": "file",
+      "size": 11278435,
+      "hash": "44502afab3e3c572fc0b1d19d84935635a7a4a7eb8003d02a7dee5728028b354"
+    },
+    "publishRule.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "885b41aa4b0c1262e04cf9a9ffac81892a3edd2dc76fd4e33546ae0b5f66a3ce"
+    },
+    "publishSurge.prover": {
+      "type": "file",
+      "size": 11277548,
+      "hash": "8b56e80e59d7f43baa4dda204e6f349893cd4714379874a9b87bb6607b8a473e"
+    },
+    "publishSurge.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "d5d6b9fac2904f2fbf014b8d6994bfc97b0ebb22f88eeee0ebc8ebb13752a37a"
+    },
+    "recordPayout.prover": {
+      "type": "file",
+      "size": 22553060,
+      "hash": "6f69c77070584b2b4cdae196df4967c1877dbb2ff04786b02ba853beb98bbff0"
+    },
+    "recordPayout.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "b3929d4d294481432c3b376b3d524870747ee30ecf4553206267a264bf33c9f8"
+    }
+  }
+}

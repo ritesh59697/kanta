@@ -1,0 +1,23 @@
+{
+  "name": "@kanta/contract",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "compact": "compact compile src/kanta.compact src/managed/kanta",
+    "compact:fast": "compact compile --skip-zk src/kanta.compact src/managed/kanta",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.21.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.0"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

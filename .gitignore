@@ -1,0 +1,13 @@
+node_modules/
+dist/
+logs/
+.env
+.env.*
+!.env.example
+platform/data/
+midnight-level-db*/
+*.log
+.DS_Store
+
+# Proving keys are ~45 MB; rebuild with `npm run compact`.
+contract/src/managed/*/keys/

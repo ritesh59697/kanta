@@ -1,0 +1,11 @@
+{
+  "name": "kanta",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "workspaces": ["contract", "platform", "web"],
+  "scripts": {
+    "compact": "npm run compact -w contract",
+    "test": "npm test -w contract"
+  }
+}
