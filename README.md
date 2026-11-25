@@ -97,7 +97,7 @@ Preview testnet. Contract: `8f81b4a97790e83edc304f93ef4e997e15d1458f0c0dcbeb1b82
 |---|---|---|
 | Deploy (notice 600 s, 30-min slots, 1 h settle window) | `00a65b8332a365548604f94254c0c88a06d88c9fe3fb973cdfce8bbedc055e5c16` | 250743 |
 | Rule v1 (₹25 base, ₹6/km, ₹1/min, ₹30 floor; parameters private) | `00e7330a9a132828a7edab403c13a62eae5d2bbbbc1d887f75daf310b8972bc493` | |
-| Surge announced before each slot, e.g. Koramangala 1.2× | `0051aa99460bfe90f4e0b65f251ade873f2f4b8697a9da41c6ee6d5c57147ba227` | |
+| Surge announced before each slot, e.g. Koramangala 1.2× (72 announcements across 3 zones as of Nov 25) | `0051aa99460bfe90f4e0b65f251ade873f2f4b8697a9da41c6ee6d5c57147ba227` | |
 | Payout: Ravi, Koramangala, 3.2 km, 22 min → ₹79.44 | `0097e55f9e6d394df82261b72d7cc792b020e775fd4cf68e4d71d3fb32b3d3a467` | 253424 |
 | Payout: Salma, **same trip** → **₹79.44** (same rule, no per-rider factor) | `00f42f5f938235ed07ac6d2185e9bee17dc6a35ef80be52ca97988779104ee41ab` | 253428 |
 | Payout: Joseph, Indiranagar, 1.5 km, 12 min → ₹46.00 | `0070782b25e1cbb4937a0df543f471d3916759ddc344ccdb672e1b59f0e223a5a1` | 253432 |
@@ -106,7 +106,7 @@ Preview testnet. Contract: `8f81b4a97790e83edc304f93ef4e997e15d1458f0c0dcbeb1b82
 | | `008111fabcce41d2b397c135ee03b1ea7b23427035b8c893f7a84dcecef107eba1` | 264078 |
 | Ravi's trip again, 10% less | **refused** by the contract, no transaction ("Payout does not follow the rule in force") | – |
 
-6 payouts on chain as of Nov 25. Receipts to paste into *Check my pay*: [Ravi](docs/receipt-ravi.txt), [Salma](docs/receipt-salma.txt), [Joseph](docs/receipt-joseph.txt), [Meena](docs/receipt-meena.txt).
+6 payouts and 72 surge announcements on chain as of Nov 25. Receipts to paste into *Check my pay*: [Ravi](docs/receipt-ravi.txt), [Salma](docs/receipt-salma.txt), [Joseph](docs/receipt-joseph.txt), [Meena](docs/receipt-meena.txt).
 
 An earlier deployment (`dfb56ac1…`, before the slot was bound to block time) is kept for history: [docs/receipt-ravi-v1.txt](docs/receipt-ravi-v1.txt).
 
