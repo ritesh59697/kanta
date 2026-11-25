@@ -4,7 +4,7 @@
 
 Built on [Midnight](https://midnight.network) for the Midnight Buildathon (Wave 3). Deployed on Midnight **Preview** testnet.
 
-**Live app:** https://kanta-site-seven.vercel.app (rider check and public record) · **Demo video:** [kanta-demo.mp4 (1:55, synthetic narration)](https://github.com/ritesh59697/kanta/releases/download/v0.3.0-wave3/kanta-demo.mp4)
+**Live app:** https://kanta-site-seven.vercel.app (rider check and public record) · **Demo video:** [watch (1:55, synthetic narration)](https://kanta-site-seven.vercel.app/kanta-demo.mp4) · [download](https://github.com/ritesh59697/kanta/releases/tag/v0.3.0-wave3)
 
 *Kanta* (काँटा) is the needle of a weighing scale. A *dharam kanta* is the public weighbridge that a buyer and a seller both trust. Kanta does the same for a rider and a platform.
 
@@ -102,9 +102,11 @@ Preview testnet. Contract: `8f81b4a97790e83edc304f93ef4e997e15d1458f0c0dcbeb1b82
 | Payout: Salma, **same trip** → **₹79.44** (same rule, no per-rider factor) | `00f42f5f938235ed07ac6d2185e9bee17dc6a35ef80be52ca97988779104ee41ab` | 253428 |
 | Payout: Joseph, Indiranagar, 1.5 km, 12 min → ₹46.00 | `0070782b25e1cbb4937a0df543f471d3916759ddc344ccdb672e1b59f0e223a5a1` | 253432 |
 | Payout: Meena, HSR Layout, 0.2 km, 2 min → ₹31.02 | `00b97405708dff5fa28eb3fd58ae8de2d3843d139df0210451b79843cbd72303af` | 253436 |
+| Payouts recorded for the demo video: Ravi, Koramangala, 3.2 km, 22 min → ₹79.44 (a new trip each time) | `00f0bccaeaeb2ee83ad2c946b26ba44811961a62f6c7be6b08814c63f06daacde8` | 264056 |
+| | `008111fabcce41d2b397c135ee03b1ea7b23427035b8c893f7a84dcecef107eba1` | 264078 |
 | Ravi's trip again, 10% less | **refused** by the contract, no transaction ("Payout does not follow the rule in force") | – |
 
-Receipts to paste into *Check my pay*: [Ravi](docs/receipt-ravi.txt), [Salma](docs/receipt-salma.txt), [Joseph](docs/receipt-joseph.txt), [Meena](docs/receipt-meena.txt).
+6 payouts on chain as of Nov 25. Receipts to paste into *Check my pay*: [Ravi](docs/receipt-ravi.txt), [Salma](docs/receipt-salma.txt), [Joseph](docs/receipt-joseph.txt), [Meena](docs/receipt-meena.txt).
 
 An earlier deployment (`dfb56ac1…`, before the slot was bound to block time) is kept for history: [docs/receipt-ravi-v1.txt](docs/receipt-ravi-v1.txt).
 
