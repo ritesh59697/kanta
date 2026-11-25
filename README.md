@@ -4,7 +4,7 @@
 
 Built on [Midnight](https://midnight.network) for the Midnight Buildathon (Wave 3). Deployed on Midnight **Preview** testnet.
 
-**Live app:** https://kanta-site-seven.vercel.app (rider check and public record) · **Demo video:** [watch (1:55, synthetic narration)](https://kanta-site-seven.vercel.app/kanta-demo.mp4) · [download](https://github.com/ritesh59697/kanta/releases/tag/v0.3.0-wave3)
+**Live app:** https://kanta-site-seven.vercel.app (overview, rider check and public record) · **Demo video:** [watch (2:11, synthetic narration)](https://kanta-site-seven.vercel.app/kanta-demo.mp4) · [download](https://github.com/ritesh59697/kanta/releases/tag/v0.3.0-wave3)
 
 *Kanta* (काँटा) is the needle of a weighing scale. A *dharam kanta* is the public weighbridge that a buyer and a seller both trust. Kanta does the same for a rider and a platform.
 
